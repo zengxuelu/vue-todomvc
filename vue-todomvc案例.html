@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="vue.js"></script>
+  <style>
+    .demo {
+      display: block;
+      width: 80%;
+      height: 35px;
+      line-height: 35px;
+      margin: 30px auto;
+      box-sizing: border-box;
+      padding-left: 4px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      outline: 0;
+      box-shadow: 0 0 5px #ccc;
+    }
+    
+    .list {
+      margin: 0 auto;
+      width: 80%;
+      font-size: 30px;
+    }
+    
+    .unit {
+      position: relative;
+      padding: 10px 0;
+      border-bottom: 1px solid #efefef;
+    }
+    
+    .unit:last-child {
+      border-bottom: 0;
+    }
+    
+    .finish {
+      text-decoration: line-through;
+      color: #ccc;
+    }
+    
+    .del {
+      background: red;
+      text-decoration: none;
+      position: absolute;
+      right: 0;
+      font-size: 30px;
+      border: 0;
+      outline: 0;
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+    }
+    
+    .empty {
+      font-size: 13px;
+      color: #ccc;
+      text-align: center;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <input type="text" v-model="task.content" placeholder="编写任务" :class="{'demo': demo}" @keydown.enter="addTask">
+  <div class="list">
+    <div class="unit" v-for="(item, index) in list">
+      <input type="checkbox" @click="changStatus(index)" :checked="item.finished">
+      <span :class="{'finish':item.finished}">{{item.content}}</span>
+      <button class="del" @click="removeTask(index)">删除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  
+  new Vue({
+    el: "#app",
+    data: {
+      task: {
+        content: "",  //内容为空
+        finished: false, // 是否完成
+        deleted: false,   //是否删除
+      },
+      demo: true,
+      //存储用户输入的内容
+      list: []
+    },
+    methods: {
+      //添加事件
+      addTask: function () {
+        //执行事件代码, 用户输入的内容
+        if (this.task.content == "") {
+          return false;
+        }
+        this.list.push(this.task);
+        this.task = {
+          content: "",  //内容为空
+          finished: false, // 是否完成
+          deleted: false   //是否删除
+        };
+      },
+      changStatus: function (index) {
+        var now = this.list[index].finished;
+        this.list[index].finished = !now;
+      },
+      removeTask: function (index) {
+        //使用splice删除数组指定项
+        if (this.list[index].finished == true) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+  });
+
+
+</script>
+
+</body>
+</html>
